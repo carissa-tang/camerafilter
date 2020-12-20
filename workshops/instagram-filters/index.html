@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Qoom Camera</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+		<link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+		<style>
+			* {
+				box-sizing:border-box;
+				margin:0;
+				padding:0;
+				color: black;
+			}
+			body {
+				width:100vw;
+				height:100vh;
+				font-family: 'Questrial', sans-serif;
+				background-image: linear-gradient(to bottom right, #add8e6, #967bb6);
+			}
+			body > section {
+				display:none;
+				width:100%;
+				height:100%;
+				grid-template-columns:auto;
+				grid-template-rows:min-content auto min-content;
+			}
+		
+			body.camera #camera {
+				display:grid;
+			}
+			
+			body.filters #filters {
+				display:grid;
+			}
+			
+			body.download #download {
+				display:grid;
+			}
+			
+			header {
+				flex: display;
+				align-items: center;
+				text-align: center;
+				padding: 1em 1em 0.75em 1em;
+				height:61px;
+			}
+			
+			main {
+				overflow:hidden;
+			}
+			
+			video {
+				width: 100%;
+				height: 100%;
+				border: solid 2px lightgrey;
+				border-right: none;
+				border-left: none;
+				overflow: hidden;
+				object-fit: cover;
+				object-position: 50% 50%;
+				transform: scaleX(-1);
+			}
+			#img {
+				width:100%;
+				height:calc(100vh - 269px);*
+				border: solid 2px lightgrey;
+				border-right: none;
+				border-left: none;
+				object-fit: cover;
+				object-position: 50% 50%;
+				display:block;
+				transform: scaleX(-1);
+			}
+			footer {
+				display: flex;
+				align-items: start;
+				justify-content: center;
+				padding: 1rem 1rem 8rem 1rem;
+				height:208px;
+			}
+			
+			footer > button {
+				font-family: 'Questrial', sans-serif;
+				font-size: 1.25rem;
+				height: 48px;
+				padding: 0 1rem;
+				margin: 0.5rem;
+				color: black;
+				border: none;
+				background-color: white;
+				border-radius: 5px;
+			}
+			footer > button > img {
+				width: 24px;
+				height: 24px;
+				vertical-align: middle;
+			}
+			.sepia {
+				filter: sepia(1);
+			}
+			
+			.filter-inkwell {
+				filter: brightness(1.25) contrast(.85) grayscale(1);
+			}
+			.filter-lofi {
+				filter: saturate(1.1) contrast(1.5);
+			}
+			.filter-brannan {
+				filter: sepia(.4) contrast(1.25) brightness(1.1) saturate(.9) hue-rotate(-2deg);
+			}
+			.blur1 {
+				filter: blur(2px);
+			}
+			
+			.blur2 {
+				filter: blur(6px);
+			}
+			
+			.blur3 {
+				filter: blur(12px);
+			}
+			
+			.blur4 {
+				filter: blur(25px);
+			}
+		</style>
+		<script src='dom-to-image.js'></script>
+		<script src='script.js' type='module'></script>
+		<script type='module'>
+	
+			const $filter  = document.querySelector('#filter')
+			const filters = ['sepia', 'filter-brannan', '', 'filter-inkwell'];
+			let index = 0;
+			function applyFilter() {
+				const $main = document.querySelector('#filters main');
+				$main.className = filters[index];
+				index++;
+				if(index >= filters.length) index = 0;
+			}
+		
+			$filter.addEventListener('click', applyFilter);
+			
+			const $blur  = document.querySelector('#blur')
+			const blurs = ['blur1', 'blur2', 'blur3', 'blur4', ''];
+			let blurindex = 0;
+			function applyBlur() {
+				const $main = document.querySelector('#filters main');
+				$main.className = blurs[blurindex];
+				blurindex++;
+				if(blurindex >= blurs.length) blurindex = 0;
+			}
+		
+			$blur.addEventListener('click', applyBlur);
+		</script>
+	</head>
+	<body class='camera'>
+		<section id='camera'>
+			<header>
+				<h2>📸 PHOTO EDITOR 📸</h2>
+			</header>
+			<main>
+				<video playsinline></video>
+			</main>
+			<footer>
+				<button id='startVideo'>
+					<img src="camera.svg">
+					Start Camera</button>
+				<button id='takePicture' style='display: none'>Take Picture</button>
+				<button id='switchCamera' style='display: none'>
+					<img src="switch.svg"></button>
+			</footer>
+		</section>
+		<section id='filters'> 
+			<header>
+				<h2>📸 Photo Filters and Effects 📸</h2>
+			</header>
+			<main>
+				<img id='img'>
+			</main>
+			<footer>
+				<button id='filter'><img src="filter.svg"> Filter</button>
+				<button id='blur'><img src="filter.svg"> Blur</button>
+				<button id='download'><img src="download.svg"> Download</button>
+				<div class="slidecontainer">
+				  <input type="range" min="0" max="100" value="50" 			
+				  class="slider" id="myRange">
+				  <p>Value: <span id="demo"></span></p>
+				</div>
+			</footer>
+		</section>
+	</body>
+</html>
